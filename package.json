@@ -1,0 +1,37 @@
+{
+  "name": "fullstack3-2nd-ourbnb-backend",
+  "version": "1.0.0",
+  "description": "OurBnb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "distribute": "npm i && prisma generate && pm2 start server.js --name ourbnb-back -i max"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wecode-bootcamp-korea/fullstack3-2nd-OurBnb-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wecode-bootcamp-korea/fullstack3-2nd-OurBnb-backend/issues"
+  },
+  "homepage": "https://github.com/wecode-bootcamp-korea/fullstack3-2nd-OurBnb-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "^3.8.1",
+    "dotenv": "^13.0.1",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.8.1",
+    "bcrypt": "^5.0.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "pm2": "^5.1.2",
+    "prettier": "^2.5.1"
+  }
+}
