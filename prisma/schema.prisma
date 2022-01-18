@@ -6,6 +6,174 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Users {
+  id            Int      @id @default(autoincrement())
+  userName      String   @map("user_name")
+  snsId         String   @map("sns_id")
+  snsCreatedAt  DateTime @default(now()) @map("sns_created_at")
+  snsIsVerified Boolean  @default(false) @map("sns_is_verified")
+  password      Int
+  createdAt     DateTime @default(now()) @map("created_at")
+  hostId        Int?     @map("host_id")
+  host          Hosts?   @relation(fields: [hostId], references: [id])
+
+  Reservations Reservations[]
+  UserLikes    UserLikes[]
+  UserReviews  UserReviews[]
+  @@map("users")
+}
+
+model Reservations {
+  id         Int      @id @default(autoincrement())
+  guestCount Int      @map("guest_count")
+  checkIn    DateTime @map("check_in")
+  checkOUt   DateTime @map("check_out")
+  userId     Int      @map("user_id")
+  roomId     Int      @map("room_id")
+  user       Users    @relation(fields: [userId], references: [id])
+  room       Rooms    @relation(fields: [roomId], references: [id])
+
+  @@map("reservations")
+}
+
+model UserLikes {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  roomId    Int      @map("room_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      Users    @relation(fields: [userId], references: [id])
+  room      Rooms    @relation(fields: [roomId], references: [id])
+
+  @@map("user_likes")
+}
+
+model UserReviews {
+  id        Int      @id @default(autoincrement())
+  review    String
+  rate      Int
+  userId    Int      @map("user_id")
+  roomId    Int      @map("room_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      Users    @relation(fields: [userId], references: [id])
+  room      Rooms    @relation(fields: [roomId], references: [id])
+
+  @@map("user_reviews")
+}
+
+model Hosts {
+  id          Int      @id @default(autoincrement())
+  isSuperHost Boolean  @default(false) @map("is_super_host")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        Users[]
+
+  Rooms Rooms[]
+  @@map("hosts")
+}
+
+model Rooms {
+  id            Int       @id @default(autoincrement())
+  roomName      String    @map("room_name")
+  roomAddress   String    @map("room_address")
+  description   String
+  price         Int
+  guestCapacity Int       @map("guest_capacity")
+  bedCount      Int       @map("bed_count")
+  bedroomCount  Int       @map("bedroom_count")
+  bathroomCount Int       @map("bathroom_count")
+  cleaningFee   Int?      @map("cleaning_fee")
+  latitude      Float
+  longitude     Float
+  roomTypeId    Int       @map("room_type_id")
+  locationId    Int       @map("location_id")
+  hostId        Int       @map("host_id")
+  roomType      RoomTypes @relation(fields: [roomTypeId], references: [id])
+  location      Locations @relation(fields: [locationId], references: [id])
+  host          Hosts     @relation(fields: [hostId], references: [id])
+
+  Reservations Reservations[]
+  UserLikes    UserLikes[]
+  UserReviews  UserReviews[]
+  PublicImgs   PublicImgs[]
+
+  RoomsCoveniences RoomsCoveniences[]
+  @@map("rooms")
+  RoomsBenefits RoomsBenefits[]
+}
+
+model PublicImgs {
+  id     Int     @id @default(autoincrement())
+  imgURl String  @map("img_url")
+  roomId Int     @map("room_id")
+  isMain Boolean @default(false) @map("is_main")
+  room   Rooms   @relation(fields: [roomId], references: [id])
+
+  @@map("public_imgs")
+}
+
+model Conveiences {
+  id                Int              @id @default(autoincrement())
+  convenienceName   String           @map("convenience_name")
+  convenienceTypeId Int              @map("convenience_type_id")
+  convenienceType   ConvenienceTypes @relation(fields: [convenienceTypeId], references: [id])
+
+  RoomsCoveniences RoomsCoveniences[]
+  @@map("conveniences")
+}
+
+model ConvenienceTypes {
+  id          Int           @id @default(autoincrement())
+  type        String
+  Conveiences Conveiences[]
+}
+
+model RoomsCoveniences {
+  id            Int         @id @default(autoincrement())
+  roomId        Int         @map("room_id")
+  convenienceId Int         @map("convenience_id")
+  room          Rooms       @relation(fields: [roomId], references: [id])
+  convenience   Conveiences @relation(fields: [convenienceId], references: [id])
+
+  @@map("rooms_conveniences")
+}
+
+model Benefits {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+
+  RoomsBenefits RoomsBenefits[]
+  @@map("benefits")
+}
+
+model RoomsBenefits {
+  id        Int      @id @default(autoincrement())
+  roomId    Int      @map("room_id")
+  benefitId Int      @map("benefit_id")
+  room      Rooms    @relation(fields: [roomId], references: [id])
+  benefit   Benefits @relation(fields: [benefitId], references: [id])
+
+  @@map("rooms_benefits")
+}
+
+model RoomTypes {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  Rooms Rooms[]
+  @@map("room_types")
+}
+
+model Locations {
+  id           Int    @id @default(autoincrement())
+  locationName String @map("location_name")
+  latitude     Float
+  longitude    Float
+
+  Rooms Rooms[]
+  @@map("locations")
 }
