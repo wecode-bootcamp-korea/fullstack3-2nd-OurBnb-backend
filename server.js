@@ -24,7 +24,6 @@ const serverStart = async () => {
     });
   } catch (err) {
     console.log(err);
-    await prisma.$disconnect();
   }
 };
 
