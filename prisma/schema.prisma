@@ -12,11 +12,10 @@ datasource db {
 
 model Users {
   id            Int      @id @default(autoincrement())
-  userName      String   @map("user_name")
+  username      String
   snsId         String   @map("sns_id")
   snsCreatedAt  DateTime @default(now()) @map("sns_created_at")
   snsIsVerified Boolean  @default(false) @map("sns_is_verified")
-  password      Int
   createdAt     DateTime @default(now()) @map("created_at")
   hostId        Int?     @map("host_id")
   host          Hosts?   @relation(fields: [hostId], references: [id])
@@ -31,7 +30,7 @@ model Reservations {
   id         Int      @id @default(autoincrement())
   guestCount Int      @map("guest_count")
   checkIn    DateTime @map("check_in")
-  checkOUt   DateTime @map("check_out")
+  checkOut   DateTime @map("check_out")
   userId     Int      @map("user_id")
   roomId     Int      @map("room_id")
   user       Users    @relation(fields: [userId], references: [id])
@@ -77,8 +76,8 @@ model Hosts {
 
 model Rooms {
   id            Int       @id @default(autoincrement())
-  roomName      String    @map("room_name")
-  roomAddress   String    @map("room_address")
+  name          String
+  address       String
   description   String
   price         Int
   guestCapacity Int       @map("guest_capacity")
@@ -100,9 +99,12 @@ model Rooms {
   UserReviews  UserReviews[]
   PublicImgs   PublicImgs[]
 
-  RoomsCoveniences RoomsCoveniences[]
+  RoomsConveniences RoomsConveniences[]
+  RoomsBenefits     RoomsBenefits[]
+  RoomsRules        RoomsRules[]
+  RoomsSafety       RoomsSafety[]
+
   @@map("rooms")
-  RoomsBenefits RoomsBenefits[]
 }
 
 model PublicImgs {
@@ -115,28 +117,28 @@ model PublicImgs {
   @@map("public_imgs")
 }
 
-model Conveiences {
+model Conveniences {
   id                Int              @id @default(autoincrement())
-  convenienceName   String           @map("convenience_name")
+  name              String
   convenienceTypeId Int              @map("convenience_type_id")
   convenienceType   ConvenienceTypes @relation(fields: [convenienceTypeId], references: [id])
 
-  RoomsCoveniences RoomsCoveniences[]
+  RoomsConveniences RoomsConveniences[]
   @@map("conveniences")
 }
 
 model ConvenienceTypes {
-  id          Int           @id @default(autoincrement())
-  type        String
-  Conveiences Conveiences[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  Conveniences Conveniences[]
 }
 
-model RoomsCoveniences {
-  id            Int         @id @default(autoincrement())
-  roomId        Int         @map("room_id")
-  convenienceId Int         @map("convenience_id")
-  room          Rooms       @relation(fields: [roomId], references: [id])
-  convenience   Conveiences @relation(fields: [convenienceId], references: [id])
+model RoomsConveniences {
+  id            Int          @id @default(autoincrement())
+  roomId        Int          @map("room_id")
+  convenienceId Int          @map("convenience_id")
+  room          Rooms        @relation(fields: [roomId], references: [id])
+  convenience   Conveniences @relation(fields: [convenienceId], references: [id])
 
   @@map("rooms_conveniences")
 }
@@ -146,7 +148,7 @@ model Benefits {
   title       String
   description String
 
-  RoomsBenefits RoomsBenefits[]
+  roomsBenefit RoomsBenefits[]
   @@map("benefits")
 }
 
@@ -162,18 +164,56 @@ model RoomsBenefits {
 
 model RoomTypes {
   id   Int    @id @default(autoincrement())
-  type String
+  name String
 
-  Rooms Rooms[]
+  room Rooms[]
   @@map("room_types")
 }
 
-model Locations {
-  id           Int    @id @default(autoincrement())
-  locationName String @map("location_name")
-  latitude     Float
-  longitude    Float
+model Rules {
+  id          Int    @id @default(autoincrement())
+  logoUrl     String @map("logo_url")
+  description String
 
-  Rooms Rooms[]
+  roomsRule RoomsRules[]
+  @@map("rules")
+}
+
+model RoomsRules {
+  id     Int   @id @default(autoincrement())
+  roomId Int   @map("room_id")
+  ruleId Int   @map("rule_id")
+  room   Rooms @relation(fields: [roomId], references: [id])
+  rule   Rules @relation(fields: [ruleId], references: [id])
+
+  @@map("rooms_rules")
+}
+
+model Safety {
+  id          Int    @id @default(autoincrement())
+  logoUrl     String @map("logo_url")
+  description String
+
+  RoomsSafety RoomsSafety[]
+  @@map("safety")
+}
+
+model RoomsSafety {
+  id       Int    @id @default(autoincrement())
+  roomId   Int    @map("room_id")
+  safetyId Int    @map("safety_id")
+  room     Rooms  @relation(fields: [roomId], references: [id])
+  safety   Safety @relation(fields: [safetyId], references: [id])
+
+  @@map("rooms_safety")
+}
+
+model Locations {
+  id        Int    @id @default(autoincrement())
+  name      String
+  latitude  Float
+  longitude Float
+
+  room Rooms[]
   @@map("locations")
 }
