@@ -133,6 +133,8 @@ model ConvenienceTypes {
   id           Int            @id @default(autoincrement())
   name         String
   Conveniences Conveniences[]
+
+  @@map("convenience_types")
 }
 
 model RoomsConveniences {
