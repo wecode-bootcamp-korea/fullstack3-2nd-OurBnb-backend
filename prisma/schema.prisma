@@ -120,6 +120,8 @@ model PublicImgs {
 model Conveniences {
   id                Int              @id @default(autoincrement())
   name              String
+  logoUrl           String           @map("logo_url")
+  isMain            Boolean          @map("is_main")
   convenienceTypeId Int              @map("convenience_type_id")
   convenienceType   ConvenienceTypes @relation(fields: [convenienceTypeId], references: [id])
 
@@ -146,6 +148,7 @@ model RoomsConveniences {
 model Benefits {
   id          Int    @id @default(autoincrement())
   title       String
+  logoUrl     String @map("logo_url")
   description String
 
   roomsBenefit RoomsBenefits[]
@@ -163,8 +166,9 @@ model RoomsBenefits {
 }
 
 model RoomTypes {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
 
   room Rooms[]
   @@map("room_types")
