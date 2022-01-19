@@ -121,7 +121,7 @@ model Conveniences {
   id                Int              @id @default(autoincrement())
   name              String
   logoUrl           String           @map("logo_url")
-  isMain            Boolean          @map("is_main")
+  isMain            Boolean          @default(false) @map("is_main")
   convenienceTypeId Int              @map("convenience_type_id")
   convenienceType   ConvenienceTypes @relation(fields: [convenienceTypeId], references: [id])
 
