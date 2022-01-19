@@ -87,6 +87,8 @@ model Rooms {
   cleaningFee   Int?      @map("cleaning_fee")
   latitude      Float
   longitude     Float
+  checkIn       String    @map("check_in")
+  checkOut      String    @map("check_out")
   roomTypeId    Int       @map("room_type_id")
   locationId    Int       @map("location_id")
   hostId        Int       @map("host_id")
