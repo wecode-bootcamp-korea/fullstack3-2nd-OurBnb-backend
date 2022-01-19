@@ -52,7 +52,7 @@ model UserLikes {
 
 model UserReviews {
   id        Int      @id @default(autoincrement())
-  review    String
+  review    String   @db.VarChar(500)
   rate      Int
   userId    Int      @map("user_id")
   roomId    Int      @map("room_id")
@@ -66,7 +66,7 @@ model UserReviews {
 model Hosts {
   id          Int      @id @default(autoincrement())
   isSuperHost Boolean  @default(false) @map("is_super_host")
-  description String?
+  description String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")
   user        Users[]
 
@@ -78,7 +78,7 @@ model Rooms {
   id            Int       @id @default(autoincrement())
   name          String
   address       String
-  description   String
+  description   String    @db.VarChar(1000)
   price         Int
   guestCapacity Int       @map("guest_capacity")
   bedCount      Int       @map("bed_count")
@@ -87,6 +87,8 @@ model Rooms {
   cleaningFee   Int?      @map("cleaning_fee")
   latitude      Float
   longitude     Float
+  checkIn       String    @map("check_in")
+  checkOut      String    @map("check_out")
   roomTypeId    Int       @map("room_type_id")
   locationId    Int       @map("location_id")
   hostId        Int       @map("host_id")
