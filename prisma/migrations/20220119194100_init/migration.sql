@@ -36,7 +36,7 @@ CREATE TABLE `user_likes` (
 -- CreateTable
 CREATE TABLE `user_reviews` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `review` VARCHAR(191) NOT NULL,
+    `review` VARCHAR(500) NOT NULL,
     `rate` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
     `room_id` INTEGER NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `user_reviews` (
 CREATE TABLE `hosts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `is_super_host` BOOLEAN NOT NULL DEFAULT false,
-    `description` VARCHAR(191) NULL,
+    `description` VARCHAR(500) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -60,7 +60,7 @@ CREATE TABLE `rooms` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(1000) NOT NULL,
     `price` INTEGER NOT NULL,
     `guest_capacity` INTEGER NOT NULL,
     `bed_count` INTEGER NOT NULL,
@@ -69,6 +69,8 @@ CREATE TABLE `rooms` (
     `cleaning_fee` INTEGER NULL,
     `latitude` DOUBLE NOT NULL,
     `longitude` DOUBLE NOT NULL,
+    `check_in` VARCHAR(191) NOT NULL,
+    `check_out` VARCHAR(191) NOT NULL,
     `room_type_id` INTEGER NOT NULL,
     `location_id` INTEGER NOT NULL,
     `host_id` INTEGER NOT NULL,

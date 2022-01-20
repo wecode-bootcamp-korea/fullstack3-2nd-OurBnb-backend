@@ -5,4 +5,4 @@ module.exports = prisma;
 
 const userDao = require('./UserDao');
 
-module.exports = { userDao }
+module.exports = { userDao };

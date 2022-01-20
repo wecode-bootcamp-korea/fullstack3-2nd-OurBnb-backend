@@ -4,6 +4,8 @@
   - You are about to drop the `convenience_types` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `conveniences` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `rooms_conveniences` table. If the table is not empty, all the data it contains will be lost.
+  - Added the required column `check_in` to the `rooms` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `check_out` to the `rooms` table without a default value. This is not possible if the table is not empty.
 
 */
 -- DropForeignKey
@@ -14,6 +16,17 @@ ALTER TABLE `rooms_conveniences` DROP FOREIGN KEY `rooms_conveniences_convenienc
 
 -- DropForeignKey
 ALTER TABLE `rooms_conveniences` DROP FOREIGN KEY `rooms_conveniences_room_id_fkey`;
+
+-- AlterTable
+ALTER TABLE `hosts` MODIFY `description` VARCHAR(500) NULL;
+
+-- AlterTable
+ALTER TABLE `rooms` ADD COLUMN `check_in` VARCHAR(191) NOT NULL,
+    ADD COLUMN `check_out` VARCHAR(191) NOT NULL,
+    MODIFY `description` VARCHAR(1000) NOT NULL;
+
+-- AlterTable
+ALTER TABLE `user_reviews` MODIFY `review` VARCHAR(500) NOT NULL;
 
 -- DropTable
 DROP TABLE `convenience_types`;
