@@ -101,10 +101,10 @@ model Rooms {
   UserReviews  UserReviews[]
   PublicImgs   PublicImgs[]
 
-  RoomsConveniences RoomsConveniences[]
-  RoomsBenefits     RoomsBenefits[]
-  RoomsRules        RoomsRules[]
-  RoomsSafety       RoomsSafety[]
+  RoomsOptions  RoomsOptions[]
+  RoomsBenefits RoomsBenefits[]
+  RoomsRules    RoomsRules[]
+  RoomsSafety   RoomsSafety[]
 
   @@map("rooms")
 }
@@ -119,34 +119,34 @@ model PublicImgs {
   @@map("public_imgs")
 }
 
-model Conveniences {
-  id                Int              @id @default(autoincrement())
-  name              String
-  logoUrl           String           @map("logo_url")
-  isMain            Boolean          @default(false) @map("is_main")
-  convenienceTypeId Int              @map("convenience_type_id")
-  convenienceType   ConvenienceTypes @relation(fields: [convenienceTypeId], references: [id])
-
-  RoomsConveniences RoomsConveniences[]
-  @@map("conveniences")
-}
-
-model ConvenienceTypes {
-  id           Int            @id @default(autoincrement())
+model Options {
+  id           Int         @id @default(autoincrement())
   name         String
-  Conveniences Conveniences[]
+  logoUrl      String      @map("logo_url")
+  isMain       Boolean     @default(false) @map("is_main")
+  optionTypeId Int         @map("option_type_id")
+  optionType   OptionTypes @relation(fields: [optionTypeId], references: [id])
 
-  @@map("convenience_types")
+  RoomsOptions RoomsOptions[]
+  @@map("options")
 }
 
-model RoomsConveniences {
-  id            Int          @id @default(autoincrement())
-  roomId        Int          @map("room_id")
-  convenienceId Int          @map("convenience_id")
-  room          Rooms        @relation(fields: [roomId], references: [id])
-  convenience   Conveniences @relation(fields: [convenienceId], references: [id])
+model OptionTypes {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Options Options[]
 
-  @@map("rooms_conveniences")
+  @@map("option_types")
+}
+
+model RoomsOptions {
+  id       Int     @id @default(autoincrement())
+  roomId   Int     @map("room_id")
+  optionId Int     @map("option_id")
+  room     Rooms   @relation(fields: [roomId], references: [id])
+  option   Options @relation(fields: [optionId], references: [id])
+
+  @@map("rooms_options")
 }
 
 model Benefits {

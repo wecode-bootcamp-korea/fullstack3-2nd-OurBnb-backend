@@ -1,5 +1,3 @@
-const testController = async (req,res) => {
-   res.send("Hello World");
-}
+const userController = require('./UserController');
 
-module.exports = { testController }
+module.exports = { userController }
