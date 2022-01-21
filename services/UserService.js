@@ -21,7 +21,7 @@ const kakaologin = async (kakaoToken) => {
     kakaoUser['userName'] = kakaoUserData['properties']['nickname'];
     kakaoUser['snsId'] = kakaoUserData['id'];
     kakaoUser['snsIsVerified'] = true;
-    // kakaoUser['imgUrl'] = body['profile_image'];    users 테이블에 img_url 컬럼 추가시 커멘트 처리 해제 
+    kakaoUser['imgUrl'] = kakaoUserData['properties']['profile_image'];
     
     console.log("kakaoUser", kakaoUser);
 
@@ -30,7 +30,7 @@ const kakaologin = async (kakaoToken) => {
     // 데이터베이스 내에 해당 snsId가 존재하지 않을 경우
     if (!user) {
         // 신규 유저 등록 
-        await userDao.createUser(kakaoUser['userName'], kakaoUser['snsId'], kakaoUser['snsIsVerified']);
+        await userDao.createUser(kakaoUser['userName'], kakaoUser['imgUrl'], kakaoUser['snsId'], kakaoUser['snsIsVerified']);
         // 신규 등록된 유저 정보 반환
         user = await userDao.getUserBySnsId(kakaoUser['snsId']);
     }
