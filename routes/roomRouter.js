@@ -10,4 +10,6 @@ router.get('/options', roomController.getOptions);
 router.get('/detail', roomDetailController.getRoomDetail);
 router.get('/images', roomDetailController.getAllImgsByRoomId);
 
+router.get('/detail', roomDetailController.getRoomDetail);
+
 module.exports = router;
