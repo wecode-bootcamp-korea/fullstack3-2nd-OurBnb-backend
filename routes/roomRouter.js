@@ -3,8 +3,8 @@ const router = express.Router();
 
 const { roomController, roomDetailController } = require('../controllers');
 
+router.get('/', roomController.getRoomList);
 router.get('/options', roomController.getOptions);
-router.get('/:location', roomController.getRoomList);
 
 router.get('/detail', roomDetailController.getRoomDetail);
 
