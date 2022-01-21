@@ -13,6 +13,7 @@ datasource db {
 model Users {
   id            Int      @id @default(autoincrement())
   username      String
+  imgUrl        String   @map("img_url")
   snsId         String   @map("sns_id")
   snsCreatedAt  DateTime @default(now()) @map("sns_created_at")
   snsIsVerified Boolean  @default(false) @map("sns_is_verified")
