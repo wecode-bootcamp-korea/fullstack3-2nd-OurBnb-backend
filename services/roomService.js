@@ -1,27 +1,20 @@
-const roomDao = require('../models/roomDao');
+const { roomDao } = require('../models');
 
-const getRoomList = async (
-	location,
-	checkin,
-	checkout,
-	person,
-	roomTypeId,
-	convenienceIdForSort,
-) => {
+const getRoomList = async (location, checkin, checkout, person, roomTypeId, optionIdForSort) => {
 	const roomList = await roomDao.getRoomList(
 		location,
 		checkin,
 		checkout,
 		person,
 		roomTypeId,
-		convenienceIdForSort,
+		optionIdForSort,
 	);
 
 	return roomList;
 };
 
-const getConveniences = async () => {
-	return await roomDao.getConveniences();
+const getOptions = async () => {
+	return await roomDao.getOptions();
 };
 
-module.exports = { getRoomList, getConveniences };
+module.exports = { getRoomList, getOptions };
