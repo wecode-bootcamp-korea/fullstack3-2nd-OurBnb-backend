@@ -1,10 +1,10 @@
-const roomService = require('../services/roomService');
+const { roomService } = require('../services');
 
 const getRoomList = async (req, res) => {
 	try {
 		const { location } = req.params;
-		const { checkin, checkout, person, roomTypeId, convenience } = req.query;
-		const convenienceIdForSort = convenience ? convenience.join() : null;
+		const { checkin, checkout, person, roomTypeId, option } = req.query;
+		const optionIdForSort = Array.isArray(option) ? option.join() : option;
 
 		const roomList = await roomService.getRoomList(
 			location,
@@ -12,7 +12,7 @@ const getRoomList = async (req, res) => {
 			checkout,
 			person,
 			roomTypeId,
-			convenienceIdForSort,
+			optionIdForSort,
 		);
 
 		return res.status(200).json(roomList);
@@ -22,10 +22,10 @@ const getRoomList = async (req, res) => {
 	}
 };
 
-const getConveniences = async (req, res) => {
-	const conveniences = await roomService.getConveniences();
+const getOptions = async (req, res) => {
+	const options = await roomService.getOptions();
 
-	return res.status(200).json(conveniences);
+	return res.status(200).json(options);
 };
 
-module.exports = { getRoomList, getConveniences };
+module.exports = { getRoomList, getOptions };
