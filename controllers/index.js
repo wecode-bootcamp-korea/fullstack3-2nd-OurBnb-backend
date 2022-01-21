@@ -1,5 +1,4 @@
 const userController = require('./UserController');
-<<<<<<< HEAD
 const roomController = require('./RoomController');
 const roomDetailController = require('./RoomDetailController');
 const roomReviewController = require('./RoomReviewController');
@@ -14,8 +13,3 @@ module.exports = {
 	reservationController,
 	wishlistController,
 };
-=======
-const roomController = require('./roomController');
-
-module.exports = { userController, roomController };
->>>>>>> 7c1c884 (list API)

@@ -12,4 +12,6 @@ router.use('/users', userRouter);
 router.use('/wishlist', wishlistRouter);
 router.use('/reservation', reservationRouter);
 
+router.use('/users', userRouter);
+
 module.exports = router;
