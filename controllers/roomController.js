@@ -1,3 +1,4 @@
+const { response } = require('express');
 const { roomService } = require('../services');
 const verify = require('../utils/token');
 
@@ -36,4 +37,28 @@ const getOptions = async (req, res) => {
 	}
 };
 
-module.exports = { getRoomList, getOptions };
+const addWishList = async (req, res) => {
+	try {
+		const { userId, roomId } = req.body;
+		await roomService.addWishList(userId, roomId);
+
+		return res.status(200).json({ message: 'SUCCESS_ADD_WISHLIST' });
+	} catch (err) {
+		console.log(err);
+		return res.status(400).json({ messgae: err.message });
+	}
+};
+
+const deleteWishList = async (req, res) => {
+	try {
+		const { userId, roomId } = req.body;
+		await roomService.deleteWishList(userId, roomId);
+
+		return res.status(200).json({ message: 'SUCCESS_DELETE_WISHLIST' });
+	} catch (err) {
+		console.log(err);
+		return res.status(400).json({ messgae: err.message });
+	}
+};
+
+module.exports = { getRoomList, getOptions, addWishList, deleteWishList };
