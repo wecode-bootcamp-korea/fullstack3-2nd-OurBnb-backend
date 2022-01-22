@@ -1,3 +1,4 @@
+const { $queryRaw } = require('./index');
 const prisma = require('./index');
 
 const getLocationLatLng = async location => {
