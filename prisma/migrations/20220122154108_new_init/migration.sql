@@ -2,6 +2,7 @@
 CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(191) NOT NULL,
+    `img_url` VARCHAR(191) NOT NULL,
     `sns_id` VARCHAR(191) NOT NULL,
     `sns_created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `sns_is_verified` BOOLEAN NOT NULL DEFAULT false,
@@ -89,18 +90,18 @@ CREATE TABLE `public_imgs` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `conveniences` (
+CREATE TABLE `options` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `logo_url` VARCHAR(191) NOT NULL,
     `is_main` BOOLEAN NOT NULL DEFAULT false,
-    `convenience_type_id` INTEGER NOT NULL,
+    `option_type_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `convenience_types` (
+CREATE TABLE `option_types` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
@@ -108,10 +109,10 @@ CREATE TABLE `convenience_types` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `rooms_conveniences` (
+CREATE TABLE `rooms_options` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `room_id` INTEGER NOT NULL,
-    `convenience_id` INTEGER NOT NULL,
+    `option_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -224,13 +225,13 @@ ALTER TABLE `rooms` ADD CONSTRAINT `rooms_host_id_fkey` FOREIGN KEY (`host_id`) 
 ALTER TABLE `public_imgs` ADD CONSTRAINT `public_imgs_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `conveniences` ADD CONSTRAINT `conveniences_convenience_type_id_fkey` FOREIGN KEY (`convenience_type_id`) REFERENCES `convenience_types`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `options` ADD CONSTRAINT `options_option_type_id_fkey` FOREIGN KEY (`option_type_id`) REFERENCES `option_types`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `rooms_conveniences` ADD CONSTRAINT `rooms_conveniences_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `rooms_options` ADD CONSTRAINT `rooms_options_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `rooms_conveniences` ADD CONSTRAINT `rooms_conveniences_convenience_id_fkey` FOREIGN KEY (`convenience_id`) REFERENCES `conveniences`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `rooms_options` ADD CONSTRAINT `rooms_options_option_id_fkey` FOREIGN KEY (`option_id`) REFERENCES `options`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `rooms_benefits` ADD CONSTRAINT `rooms_benefits_room_id_fkey` FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

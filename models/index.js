@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 module.exports = prisma;
 
 const userDao = require('./UserDao');
-const roomDao = require('./roomDao');
+const roomDao = require('./RoomDao');
+const roomDetailDao = require('./RoomDetailDao');
 
-module.exports = { userDao, roomDao };
+module.exports = { userDao, roomDao, roomDetailDao };
