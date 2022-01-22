@@ -7,6 +7,8 @@ router.get('/', roomController.getRoomList);
 router.get('/options', roomController.getOptions);
 
 router.get('/detail', roomDetailController.getRoomDetail);
+router.put('/', roomController.addWishList);
+router.delete('/', roomController.deleteWishList);
 
 router.post('/reservation', reservationController.postReservation); 
 
