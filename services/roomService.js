@@ -1,16 +1,32 @@
 const { roomDao } = require('../models');
 
-const getRoomList = async (location, checkin, checkout, person, roomTypeId, optionIdForSort) => {
-	const roomList = await roomDao.getRoomList(
+const getRoomList = async (
+	location,
+	checkin,
+	checkout,
+	person,
+	roomTypeId,
+	optionIdForSort,
+	userId,
+) => {
+	const { region, roomList } = await roomDao.getRoomList(
 		location,
 		checkin,
 		checkout,
 		person,
 		roomTypeId,
 		optionIdForSort,
+		userId,
 	);
 
-	return roomList;
+	const roomListInfo = {};
+
+	roomListInfo['location'] = region['name'];
+	roomListInfo['lat'] = region['lat'];
+	roomListInfo['lng'] = region['lng'];
+	roomListInfo['roomList'] = roomList;
+
+	return roomListInfo;
 };
 
 const getOptions = async () => {

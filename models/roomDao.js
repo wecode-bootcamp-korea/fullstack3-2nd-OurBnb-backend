@@ -1,6 +1,24 @@
 const prisma = require('./index');
 
-const getRoomList = async (location, checkin, checkout, person, roomTypeId, optionIdForSort) => {
+const getRoomList = async (
+	location,
+	checkin,
+	checkout,
+	person,
+	roomTypeId,
+	optionIdForSort,
+	userId,
+) => {
+	const [region] = await prisma.$queryRaw`
+    SELECT
+      locations.name,
+      locations.latitude AS lat,
+      locations.longitude AS lng
+    FROM locations
+    WHERE
+      locations.name LIKE CONCAT("%",${location},"%")
+  `;
+
 	const roomList = await prisma.$queryRaw`
     SELECT
       rooms.id AS roomId,
@@ -13,13 +31,20 @@ const getRoomList = async (location, checkin, checkout, person, roomTypeId, opti
       rooms.price,
       rooms.latitude,
       rooms.longitude,
-      rooms.host_id AS hostId,
       hosts.is_super_host,
       room_types.name AS roomType,
-      locations.name AS location,
       (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId )AS imgUrl,
       (SELECT COUNT(user_reviews.review) FROM user_reviews WHERE user_reviews.room_id = roomId) AS reviewCount,
-      (SELECT AVG(user_reviews.rate) FROM user_reviews WHERE user_reviews.room_id = roomId) AS rate
+      (SELECT AVG(user_reviews.rate) FROM user_reviews WHERE user_reviews.room_id = roomId) AS rate,
+      (SELECT EXISTS
+        (SELECT
+          user_likes.id
+        FROM user_likes
+        WHERE
+          user_likes.user_id = ${userId}
+        AND
+          user_likes.room_id = roomId)
+      ) AS isWish
     FROM rooms
     JOIN hosts ON hosts.id = rooms.host_id
     JOIN room_types ON room_types.id = rooms.room_type_id
@@ -49,9 +74,11 @@ const getRoomList = async (location, checkin, checkout, person, roomTypeId, opti
       if(${optionIdForSort}, options.id IN (${optionIdForSort}), options.id is NOT NULL)
     GROUP BY rooms.id
     ORDER BY rooms.id
+    LIMIT 1
+    OFFSET 0
   `;
 
-	return roomList;
+	return { region, roomList };
 };
 
 const getOptions = async () => {
