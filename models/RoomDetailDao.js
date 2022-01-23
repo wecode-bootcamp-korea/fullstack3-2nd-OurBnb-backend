@@ -1,6 +1,6 @@
 const prisma = require('./index');
 
-const getRoomDetail = async (roomId) => { 
+const getMainInfo = async (roomId) => { 
   const detail = await prisma.$queryRaw`
     SELECT
       id AS roomId,
@@ -15,22 +15,11 @@ const getRoomDetail = async (roomId) => {
       cleaning_fee AS cleaningFee,
       latitude,
       longitude,
-      public_imgs.img_url AS imgUrl,
       room_types.name AS roomType,
       locations.name AS location,
       hosts.is_super_host AS isSuperHost,
       hosts.description AS hostDesc,
-      options.name AS optionName,                
-      options.logo_url AS optionLogoUrl,
-      options.is_main AS isMainOption,
-      option_types.name AS optionType,
-      benefits.title AS benefitTitle, 
-      benefits.logo_url AS benefitLogoUrl, 
-      benefits.description AS benefitDesc,
-      rules.logo_url AS rulesLogoUrl, 
-      rules.description AS rulesDesc, 
-      safety.logo_url AS safetyLogoUrl, 
-      safety.description AS safetyDesc   
+      GROUP_CONCAT(public_imgs.img_url SEPARATOR ' ') AS imgUrl
     FROM rooms
     JOIN 
       public_imgs ON rooms.id = public_imgs.room_id 
@@ -40,28 +29,79 @@ const getRoomDetail = async (roomId) => {
       locations ON rooms.location_id = locations.id
     JOIN 
       hosts ON rooms.host_id = hosts.id 
-    INNER JOIN 
-      rooms_options ON rooms.id = rooms_options.room_id
-    INNER JOIN
-      options ON rooms_options.option_id = options.id
-    INNER JOIN 
-      rooms_benefits ON rooms.id = rooms_benefits.room_id
-    INNER JOIN
-      benefits ON rooms_benefits.benefit_id = benefits.id
-    INNER JOIN 
-      rooms_rules ON rooms.id = rooms_rules.room_id
-    INNER JOIN
-      rules ON rooms_rules.rule_id = rules.id
-    INNER JOIN 
-      rooms_safety ON rooms.id = rooms_safety.room_id
-    INNER JOIN
-      safety ON rooms_safety.safety_id = safety.id 
     WHERE 
       rooms.id = ${roomId}
   `; 
   return detail;
 };
 
+const getOption = async (roomId) => { 
+  const option = await prisma.$queryRaw`
+    SELECT
+      name AS optionName,                
+      logo_url AS optionLogoUrl,
+      is_main AS isMainOption,
+      option_types.name AS optionType
+    FROM options
+    JOIN 
+      option_types ON options.option_type_id = option_types.id 
+    INNER JOIN 
+      rooms_options ON options.id = rooms_options.option_id
+    INNER JOIN
+      rooms ON rooms_options.room_id = rooms.id
+    WHERE
+      rooms.id = ${roomId}
+  `;
+  return option; 
+} 
 
+const getBenefit = async (roomId) => { 
+  const benefit = await prisma.$queryRaw`
+    SELECT
+      title AS benefitTitle, 
+      logo_url AS benefitLogoUrl, 
+      description AS benefitDesc
+    FROM benefits
+    INNER JOIN 
+      rooms_benefits ON benefits.id = rooms_benefits.benefit_id
+    INNER JOIN
+      rooms ON rooms_benefits.room_id = rooms.id
+    WHERE
+      rooms.id = ${roomId}
+  `;
+  return benefit; 
+} 
 
-module.exports = { getRoomDetail };
+const getRule = async (roomId) => { 
+  const rule = await prisma.$queryRaw`
+    SELECT
+      rules.logo_url AS rulesLogoUrl, 
+      rules.description AS rulesDesc
+    FROM rules
+    INNER JOIN 
+      rooms_rules ON rules.id = rooms_rules.rule_id
+    INNER JOIN
+      rooms ON rooms_rules.room_id = rooms.id
+    WHERE
+      rooms.id = ${roomId}
+  `;
+  return rule; 
+} 
+
+const getSafety = async (roomId) => { 
+  const safety = await prisma.$queryRaw`
+    SELECT
+      safety.logo_url AS safetyLogoUrl, 
+      safety.description AS safetyDesc  
+    FROM safety
+    INNER JOIN 
+      rooms_safety ON safety.id = rooms_safety.safety_id
+    INNER JOIN
+      rooms ON rooms_safety.room_id = rooms.id 
+    WHERE
+      rooms.id = ${roomId}
+  `;
+  return safety; 
+} 
+
+module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety };
