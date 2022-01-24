@@ -9,7 +9,7 @@ const getRoomList = async (
 	optionIdForSort,
 	userId,
 ) => {
-	const { region, roomList } = await roomDao.getRoomList(
+	const roomList = await roomDao.getRoomList(
 		location,
 		checkin,
 		checkout,
@@ -18,6 +18,8 @@ const getRoomList = async (
 		optionIdForSort,
 		userId,
 	);
+
+	const region = await roomDao.getLocationLatLng(location);
 
 	const roomListInfo = {};
 
