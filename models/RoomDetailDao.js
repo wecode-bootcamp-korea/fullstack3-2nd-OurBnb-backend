@@ -3,23 +3,23 @@ const prisma = require('./index');
 const getMainInfo = async (roomId) => { 
   const detail = await prisma.$queryRaw`
     SELECT
-      id AS roomId,
-      name AS roomName,
-      address,
-      description AS roomDesc,
-      price,
-      guest_capacity AS guestCapacity,
-      bed_count AS bedCount,
-      bedroom_count AS bedroomCount,
-      bathroom_count AS bathroomCount,
-      cleaning_fee AS cleaningFee,
-      latitude,
-      longitude,
+      rooms.id AS roomId,
+      rooms.name AS roomName,
+      rooms.address,
+      rooms.description AS roomDesc,
+      rooms.price,
+      rooms.guest_capacity AS guestCapacity,
+      rooms.bed_count AS bedCount,
+      rooms.bedroom_count AS bedroomCount,
+      rooms.bathroom_count AS bathroomCount,
+      rooms.cleaning_fee AS cleaningFee,
+      rooms.latitude,
+      rooms.longitude,
       room_types.name AS roomType,
       locations.name AS location,
       hosts.is_super_host AS isSuperHost,
       hosts.description AS hostDesc,
-      GROUP_CONCAT(public_imgs.img_url SEPARATOR ' ') AS imgUrl
+      (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId )AS imgUrl
     FROM rooms
     JOIN 
       public_imgs ON rooms.id = public_imgs.room_id 
@@ -31,6 +31,8 @@ const getMainInfo = async (roomId) => {
       hosts ON rooms.host_id = hosts.id 
     WHERE 
       rooms.id = ${roomId}
+    AND 
+      public_imgs.is_main =1
   `; 
   return detail;
 };
@@ -38,9 +40,9 @@ const getMainInfo = async (roomId) => {
 const getOption = async (roomId) => { 
   const option = await prisma.$queryRaw`
     SELECT
-      name AS optionName,                
-      logo_url AS optionLogoUrl,
-      is_main AS isMainOption,
+      options.name AS optionName,                
+      options.logo_url AS optionLogoUrl,
+      options.is_main AS isMainOption,
       option_types.name AS optionType
     FROM options
     JOIN 
@@ -58,9 +60,9 @@ const getOption = async (roomId) => {
 const getBenefit = async (roomId) => { 
   const benefit = await prisma.$queryRaw`
     SELECT
-      title AS benefitTitle, 
-      logo_url AS benefitLogoUrl, 
-      description AS benefitDesc
+      benefits.title AS benefitTitle, 
+      benefits.logo_url AS benefitLogoUrl, 
+      benefits.description AS benefitDesc
     FROM benefits
     INNER JOIN 
       rooms_benefits ON benefits.id = rooms_benefits.benefit_id
@@ -104,4 +106,27 @@ const getSafety = async (roomId) => {
   return safety; 
 } 
 
-module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety };
+const getAllImgs = async (roomId) => {
+  const allImgs = await prisma.$queryRaw`
+    SELECT 
+      public_imgs.img_url AS imgUrl
+    FROM public_imgs
+    JOIN 
+      public_imgs ON public_imgs.room_id = rooms.id
+    WHERE 
+      rooms.id = ${roomId}
+  `;
+  return allImgs;
+}
+
+const makeReservation = async (userId, roomId, guestCount, checkIn, checkOut) => {
+  await prisma.$queryRaw`
+    INSERT INTO
+      reservations (guest_count, user_id, room_id, check_in, check_out)
+    VALUES 
+      (${guestCount}, ${userId}, ${roomId}, ${checkIn}, ${checkOut}) 
+  `; 
+  return 'RESERVATION SUCCESS'; 
+}
+
+module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgs, makeReservation };
