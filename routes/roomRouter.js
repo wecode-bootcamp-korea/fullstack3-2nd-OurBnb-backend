@@ -12,4 +12,6 @@ router.get('/images', roomDetailController.getAllImgsByRoomId);
 
 router.get('/detail', roomDetailController.getRoomDetail);
 
+router.post('/reservation', reservationController.postReservation);
+
 module.exports = router;
