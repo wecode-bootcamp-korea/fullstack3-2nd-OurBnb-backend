@@ -14,13 +14,14 @@ const kakaologin = async kakaoToken => {
 		throw error;
 	}
 
+	console.log("kakaoUserData", kakaoUserData);
 	// 필요한 정보만 골라내서 담을 Kakao User 객체
 	const kakaoUser = {};
 
 	kakaoUser['userName'] = kakaoUserData['properties']['nickname'];
 	kakaoUser['snsId'] = kakaoUserData['id'];
 	kakaoUser['snsIsVerified'] = true;
-	kakaoUser['imgUrl'] = kakaoUserData['properties']['profile_image'];
+	kakaoUser['imgUrl'] = kakaoUserData['kakao_account']['profile']['profile_image_url'];
 
 	console.log('kakaoUser', kakaoUser);
 
@@ -83,8 +84,4 @@ const getReservationList = async userId => {
 	return await userDao.getReservationListById(userId);
 };
 
-const getWishList = async () => {
-	return await userDao.getWishList();
-};
-
-module.exports = { kakaologin, kakaologout, getReservationList, getWishList };
+module.exports = { kakaologin, kakaologout, getReservationList };

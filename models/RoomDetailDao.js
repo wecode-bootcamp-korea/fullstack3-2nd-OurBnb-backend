@@ -1,7 +1,7 @@
 const prisma = require('./index');
 
 const getMainInfo = async (roomId) => { 
-  const detail = await prisma.$queryRaw`
+  const [detail] = await prisma.$queryRaw`
     SELECT
       rooms.id AS roomId,
       rooms.name AS roomName,
@@ -19,14 +19,18 @@ const getMainInfo = async (roomId) => {
       locations.name AS location,
       hosts.is_super_host AS isSuperHost,
       hosts.description AS hostDesc,
-      (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId AND public_imgs.is_main =1)AS imgUrl
+      users.username AS hostName,
+      users.img_url AS hostImgUrl,
+      (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId AND public_imgs.is_main =1) AS imgUrl
     FROM rooms
     JOIN 
       room_types ON rooms.room_type_id = room_types.id 
     JOIN 
       locations ON rooms.location_id = locations.id
     JOIN 
-      hosts ON rooms.host_id = hosts.id 
+      hosts ON rooms.host_id = hosts.id
+    JOIN
+      users on rooms.host_id = users.host_id 
     WHERE 
       rooms.id = ${roomId}
   `; 
