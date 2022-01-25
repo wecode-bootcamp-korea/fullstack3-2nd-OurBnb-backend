@@ -9,6 +9,8 @@ const getRoomList = async (
 	roomTypeId,
 	optionIdForSort,
 	userId,
+	limit,
+	offset,
 ) => {
 	const roomList = await roomDao.getRoomList(
 		location,
@@ -18,18 +20,17 @@ const getRoomList = async (
 		roomTypeId,
 		optionIdForSort,
 		userId,
+		limit,
+		offset,
 	);
 
 	const region = await roomDao.getLocationLatLng(location);
 
-	const roomListInfo = {};
+	roomList['location'] = region['name'];
+	roomList['lat'] = region['lat'];
+	roomList['lng'] = region['lng'];
 
-	roomListInfo['location'] = region['name'];
-	roomListInfo['lat'] = region['lat'];
-	roomListInfo['lng'] = region['lng'];
-	roomListInfo['roomList'] = roomList;
-
-	return roomListInfo;
+	return roomList;
 };
 
 const getOptions = async () => {
