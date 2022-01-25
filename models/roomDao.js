@@ -22,9 +22,11 @@ const getRoomList = async (
 	roomTypeId,
 	optionIdForSort,
 	userId,
+	limit,
+	offset,
 ) => {
 	const roomList = await prisma.$queryRaw`
-    SELECT
+    SELECT SQL_CALC_FOUND_ROWS
       rooms.id AS roomId,
       rooms.name AS roomName,
       rooms.address,
@@ -77,9 +79,15 @@ const getRoomList = async (
       if(${optionIdForSort}, options.id IN (${optionIdForSort}), options.id is NOT NULL)
     GROUP BY rooms.id
     ORDER BY rooms.id
+    LIMIT ${limit}
+    OFFSET ${offset}
   `;
 
-	return roomList;
+	const [{ totalRows: totalRows }] = await prisma.$queryRaw`
+    SELECT FOUND_ROWS() AS totalRows
+    `;
+
+	return { totalRows, roomList };
 };
 
 const getOptions = async () => {
