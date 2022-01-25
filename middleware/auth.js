@@ -15,6 +15,10 @@ const validateToken = async (req, res, next) => {
 			return res.status(401).json({ message: 'INVALID_TOKEN' });
 		}
 
+		if (!token) {
+			return res.status(401).json({ message: 'LOGIN_REQUIRED' });
+		}
+
 		const { id } = verifyToken(token);
 
 		if (!id) {
