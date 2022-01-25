@@ -119,14 +119,4 @@ const getAllImgs = async (roomId) => {
   return allImgs;
 }
 
-const makeReservation = async (userId, roomId, guestCount, checkIn, checkOut) => {
-  await prisma.$queryRaw`
-    INSERT INTO
-      reservations (guest_count, user_id, room_id, check_in, check_out)
-    VALUES 
-      (${guestCount}, ${userId}, ${roomId}, ${checkIn}, ${checkOut}) 
-  `; 
-  return 'RESERVATION SUCCESS'; 
-}
-
-module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgs, makeReservation };
+module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgs };
