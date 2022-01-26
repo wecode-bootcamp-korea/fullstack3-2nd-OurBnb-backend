@@ -1,24 +1,30 @@
 const { verifyToken } = require('../utils/token');
 const { userDao } = require('../models');
+const { json } = require('express');
 
 const authToken = async (req, res, next) => {
 	try {
 		const token = req.headers.authorization;
-		
+
 		if (!token) {
 			return res.status(401).json({ message: 'LOGIN_REQUIRED' });
+		}
+
+		const decodedToken = verifyToken(token);
+		if (!decodedToken) {
+			return res.status(401).json({ message: 'INVALID_TOKEN' });
 		}
 
 		const { id } = verifyToken(token);
 
 		if (!id) {
-			return res.status(401).json({ message: 'INVAILD_TOKEN' });
+			return res.status(401).json({ message: 'INVALID_TOKEN' });
 		}
 
 		const userInfo = await userDao.getUserBySnsId(id);
 
 		if (!userInfo) {
-			return res.status(401).json({ message: 'INVAILD_TOKEN' });
+			return res.status(401).json({ message: 'INVALID_TOKEN' });
 		}
 
 		req.userId = userInfo.userId;
