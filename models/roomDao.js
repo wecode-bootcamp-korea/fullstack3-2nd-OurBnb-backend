@@ -1,4 +1,3 @@
-const { $queryRaw } = require('./index');
 const prisma = require('./index');
 
 const getLocationLatLng = async location => {
@@ -112,32 +111,9 @@ const getWishListForCheck = async (userId, roomId) => {
   `;
 };
 
-const addWishList = async (userId, roomId) => {
-	await prisma.$queryRaw`
-    INSERT INTO
-      user_likes (user_id, room_id)
-    VALUES
-      (${userId}, ${roomId})
-  `;
-};
-
-const deleteWishList = async (userId, roomId) => {
-	await prisma.$queryRaw`
-    DELETE
-    FROM user_likes
-    WHERE
-      user_likes.user_id = ${userId}
-    AND
-      user_likes.room_id = ${roomId}
-
-  `;
-};
-
 module.exports = {
 	getRoomList,
 	getOptions,
 	getLocationLatLng,
 	getWishListForCheck,
-	addWishList,
-	deleteWishList,
 };
