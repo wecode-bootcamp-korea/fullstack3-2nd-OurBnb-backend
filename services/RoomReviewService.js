@@ -1,4 +1,3 @@
-const { roomReviewController } = require('../controllers');
 const { roomReviewDao } = require('../models');
 
 const getRoomReview = async (roomId) => {
