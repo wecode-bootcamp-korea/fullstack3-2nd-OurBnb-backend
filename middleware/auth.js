@@ -1,10 +1,9 @@
-const verifyToken = require('../utils/token');
+const { verifyToken } = require('../utils/token');
 const { userDao } = require('../models');
 
-const authToken = async (res, req, next) => {
+const authToken = async (req, res, next) => {
 	try {
-		const token = req.header.authorization;
-
+		const token = req.headers.authorization;
 		if (!token) {
 			return res.status(401).json({ message: 'LOGIN_REQUIRED' });
 		}
@@ -29,12 +28,14 @@ const authToken = async (res, req, next) => {
 	}
 };
 
-const checkToken = async (res, req, next) => {
+const checkToken = async (req, res, next) => {
 	try {
-		const token = req.header.authorization;
-		const userId = token ? verifyToken(token).id : null;
+		const token = req.headers.authorization;
+		const decodedToken = verifyToken(token);
+		const snsId = decodedToken ? decodedToken.id : null;
+		const userInfo = snsId ? await userDao.getUserBySnsId(snsId) : null;
 
-		req.userId = userId;
+		req.userId = userInfo ? userInfo.userId : null;
 
 		next();
 	} catch (err) {
