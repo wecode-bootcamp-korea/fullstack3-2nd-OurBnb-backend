@@ -30,4 +30,15 @@ const getAvgRoomRate = async (roomId) => {
   return avgRate;
 }
 
-module.exports = { getRoomReview, getAvgRoomRate };
+const getRoomReviewCount = async (roomId) => {
+    const [{reviewCount}] = await prisma.$queryRaw`
+    SELECT 
+      COUNT(*) AS reviewCount
+    FROM user_reviews
+    WHERE 
+      user_reviews.room_id = ${roomId}
+  `;
+  return reviewCount;
+}
+
+module.exports = { getRoomReview, getAvgRoomRate, getRoomReviewCount };
