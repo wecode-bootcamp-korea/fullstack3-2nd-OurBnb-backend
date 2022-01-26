@@ -83,8 +83,4 @@ const getReservationList = async userId => {
 	return await userDao.getReservationListById(userId);
 };
 
-const getWishList = async () => {
-	return await userDao.getWishList();
-};
-
-module.exports = { kakaologin, kakaologout, getReservationList, getWishList };
+module.exports = { kakaologin, kakaologout, getReservationList };
