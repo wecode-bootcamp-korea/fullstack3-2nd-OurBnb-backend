@@ -1,3 +1,4 @@
+const { roomReviewController } = require('../controllers');
 const { roomReviewDao } = require('../models');
 
 <<<<<<< HEAD
@@ -40,6 +41,7 @@ const getRoomReview = async (roomId) => {
   const reviewInfo = {};   
 
   const roomAvgRate = await roomReviewDao.getAvgRoomRate(roomId); 
+  const roomReviewCount = await roomReviewDao.getRoomReviewCount(roomId);
   const roomReview = await roomReviewDao.getRoomReview(roomId); 
 
   if (!roomAvgRate) {
@@ -47,6 +49,12 @@ const getRoomReview = async (roomId) => {
     error.statusCode = 400;
     throw error;
   }  
+  
+  if (!roomReviewCount) {
+    const error = new Error('ROOM_REVIEW_COUNT_LOAD_FAILED');
+    error.statusCode = 400;
+    throw error;
+  } 
 
   if (!roomReview) {
     const error = new Error('ROOM_REVIEW_LOAD_FAILED');
@@ -55,6 +63,7 @@ const getRoomReview = async (roomId) => {
   }  
 
   reviewInfo['roomAvgRate'] = roomAvgRate;
+  reviewInfo['roomReviewCount'] = roomReviewCount;
   reviewInfo['roomReview'] = roomReview;
   
   return reviewInfo;
