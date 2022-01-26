@@ -1,4 +1,4 @@
-const wishlistService = require('../services/WishListService');
+const { wishlistService } = require('../services');
 
 const getWishList = async (req, res) => {
 	try {

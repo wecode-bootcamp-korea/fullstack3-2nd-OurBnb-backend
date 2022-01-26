@@ -30,6 +30,18 @@ WHERE
 	return wishList;
 };
 
+const getWishListForCheck = async (userId, roomId) => {
+	return await prisma.$queryRaw`
+    SELECT
+      user_likes.id
+    FROM user_likes
+    WHERE
+      user_likes.room_id = ${roomId}
+    AND
+      user_likes.user_id = ${userId}
+  `;
+};
+
 const addWishList = async (userId, roomId) => {
 	await prisma.$queryRaw`
     INSERT INTO
@@ -55,4 +67,5 @@ module.exports = {
 	getWishList,
 	addWishList,
 	deleteWishList,
+	getWishListForCheck,
 };

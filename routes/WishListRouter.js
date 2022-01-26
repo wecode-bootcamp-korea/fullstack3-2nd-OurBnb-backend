@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const wishlistController = require('../controllers/WishListController');
+const { wishlistController } = require('../controllers');
 const { authToken } = require('../middleware/auth');
 
 router.get('/', authToken, wishlistController.getWishList);

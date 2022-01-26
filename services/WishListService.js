@@ -1,4 +1,4 @@
-const wishlistDao = require('../models/WishListDao');
+const { wishlistDao } = require('../models');
 
 const getWishList = async userId => {
 	return await wishlistDao.getWishList(userId);
