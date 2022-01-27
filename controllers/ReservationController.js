@@ -3,7 +3,7 @@ const { reservationService } = require('../services');
 const postReservation = async (req,res) => {
     try {
       const userId = req.userId;
-      const { roomId, guestCount, checkIn, checkOut } = req.query;
+      const { guestCount, checkIn, checkOut, roomId } = req.query;
   
       if (!userId || !roomId || !guestCount || !checkIn || !checkOut) {
         const err = new Error('REQUIREMENT_MISSING')
@@ -11,7 +11,7 @@ const postReservation = async (req,res) => {
         throw err
       }
       
-      const reservation = await reservationService.postReservation(userId, roomId, guestCount, checkIn, checkOut);
+      const reservation = await reservationService.postReservation(guestCount, checkIn, checkOut, userId, roomId);
   
       return res.status(200).json({ reservation });
     } catch (err) {

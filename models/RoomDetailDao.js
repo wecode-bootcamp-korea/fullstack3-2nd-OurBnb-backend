@@ -20,6 +20,7 @@ const getMainInfo = async (roomId) => {
       hosts.is_super_host AS isSuperHost,
       hosts.description AS hostDesc,
       users.username AS hostName,
+      users.img_url AS hostImgUrl,
       (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId AND public_imgs.is_main =1) AS imgUrl
     FROM rooms
     JOIN 
