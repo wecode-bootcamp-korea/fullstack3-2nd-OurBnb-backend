@@ -7,7 +7,7 @@ const {
 	roomReviewController,
 	reservationController,
 } = require('../controllers');
-const { checkToken } = require('../middleware/auth');
+const { authToken, checkToken } = require('../middleware/auth');
 
 router.get('/', checkToken, roomController.getRoomList);
 router.get('/options', roomController.getOptions);
@@ -17,6 +17,6 @@ router.get('/images', roomDetailController.getAllImgsByRoomId);
 
 router.get('/detail', roomDetailController.getRoomDetail);
 
-router.post('/reservation', reservationController.postReservation);
+router.post('/reservation', authToken, reservationController.postReservation);
 
 module.exports = router;
