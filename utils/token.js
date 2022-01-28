@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const salt = 'OURBNBSALT';
 
 const loginToken = (id) => {
-  return jwt.sign({ id: id }, salt, { expiresIn: '2h' });
+	return jwt.sign({ id: id }, salt, { expiresIn: '2h' });
 };
 
 const verifyToken = token => {
