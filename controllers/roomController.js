@@ -5,7 +5,6 @@ const verify = require('../utils/token');
 const getRoomList = async (req, res) => {
 	try {
 		const userId = req.userId;
-		console.log('userId : ' + userId);
 		const { location, checkin, checkout, person, roomTypeId, option, limit, offset } = req.query;
 		const optionIdForSort = Array.isArray(option) ? option.join() : option;
 		const roomTypeIdForSort = Array.isArray(roomTypeId) ? roomTypeId.join() : roomTypeId;
