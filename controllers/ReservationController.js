@@ -10,7 +10,7 @@ const postReservation = async (req,res) => {
         err.statusCode = 400
         throw err
       }
-      
+
       const reservation = await reservationService.postReservation(guestCount, checkIn, checkOut, userId, roomId);
   
       return res.status(200).json({ reservation });
