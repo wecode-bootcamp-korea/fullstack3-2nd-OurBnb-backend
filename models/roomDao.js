@@ -85,6 +85,7 @@ const getRoomList = async (
 	const [{ totalRows: totalRows }] = await prisma.$queryRaw`
     SELECT FOUND_ROWS() AS totalRows
     `;
+	console.log(totalRows);
 	return { totalRows, roomList };
 };
 
