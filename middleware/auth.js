@@ -2,6 +2,8 @@ const { verifyToken } = require('../utils/token');
 const { userDao } = require('../models');
 
 const authToken = async (req, res, next) => {
+// const validateToken
+// 로그인한 고객만 사용가능한 API 검증 
 	try {
 		const token = req.headers.authorization;
 
@@ -34,7 +36,9 @@ const authToken = async (req, res, next) => {
 	}
 };
 
-const checkToken = async (req, res, next) => {
+// 로그인한 회원이라면, 회원의 id를 통해 정보를 받아온 뒤 API를 이용합니다.
+// 로그인 하지 않은 고객이라면, 회원 정보를 사용하지 않고 API를 이용합니다.
+const checkToken = async (req, res, next) => { 
 	try {
 		const token = req.headers.authorization;
 		const decodedToken = verifyToken(token);
