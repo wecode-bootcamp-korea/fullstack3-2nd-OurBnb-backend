@@ -18,7 +18,8 @@ router.get('/images', roomDetailController.getAllImgsByRoomId);
 router.get('/detail', roomDetailController.getRoomDetail);
 
 router.post('/reservation', authToken, reservationController.postReservation);
-router.get('/reservation', reservationController.getReservation);
-router.put('/reservation', reservationController.updateReservation);
+router.get('/reservation', authToken, reservationController.getReservation);
+router.put('/reservation', authToken, reservationController.updateReservation);
 router.delete('/reservation', authToken, reservationController.deleteReservation);
+
 module.exports = router;

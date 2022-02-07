@@ -1,6 +1,5 @@
 const { verifyToken } = require('../utils/token');
 const { userDao } = require('../models');
-const { json } = require('express');
 
 // 로그인한 유저만 사용가능한 API 검증
 const validateToken = async (req, res, next) => {
