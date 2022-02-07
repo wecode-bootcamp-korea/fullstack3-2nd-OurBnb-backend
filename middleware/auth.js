@@ -1,6 +1,5 @@
 const { verifyToken } = require('../utils/token');
 const { userDao } = require('../models');
-const { json } = require('express');
 
 const authToken = async (req, res, next) => {
 	try {

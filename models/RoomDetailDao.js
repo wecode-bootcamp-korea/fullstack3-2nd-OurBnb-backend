@@ -106,17 +106,17 @@ const getSafety = async (roomId) => {
   return safety; 
 } 
 
-const getAllImgs = async (roomId) => {
+const getAllImgsByRoomId = async (roomId) => {
   const allImgs = await prisma.$queryRaw`
     SELECT 
       public_imgs.img_url AS imgUrl
     FROM public_imgs
     JOIN 
-      public_imgs ON public_imgs.room_id = rooms.id
+      rooms ON rooms.id = public_imgs.room_id 
     WHERE 
       rooms.id = ${roomId}
   `;
   return allImgs;
 }
 
-module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgs };
+module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgsByRoomId };

@@ -80,8 +80,4 @@ const postDataToKakao = async kakaoToken => {
 	return response.data;
 };
 
-const getReservationList = async userId => {
-	return await userDao.getReservationListById(userId);
-};
-
-module.exports = { kakaologin, kakaologout, getReservationList };
+module.exports = { kakaologin, kakaologout };
