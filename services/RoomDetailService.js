@@ -26,8 +26,8 @@ const getRoomDetail = async (roomId) => {
   return detail;
 };
 
-const getAllImgs = async (roomId) => {
-	const allImgs = await roomDetailDao.getAllImgs(roomId);
+const getAllImgsByRoomId = async (roomId) => {
+	const allImgs = await roomDetailDao.getAllImgsByRoomId(roomId);
 
   if (!allImgs) {
     const error = new Error('ROOM IMAGES LOAD FAILED');
@@ -38,4 +38,4 @@ const getAllImgs = async (roomId) => {
   return allImgs;
 };
 
-module.exports = { getRoomDetail, getAllImgs };
+module.exports = { getRoomDetail, getAllImgsByRoomId };

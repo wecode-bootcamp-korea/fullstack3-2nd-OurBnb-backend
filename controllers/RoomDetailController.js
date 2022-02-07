@@ -25,7 +25,7 @@ const getRoomDetail = async (req, res) => {
   }
 };
 
-const getAllImgs = async (req, res) => {
+const getAllImgsByRoomId = async (req, res) => {
   try {
     const { roomId } = req.query;
 
@@ -35,7 +35,7 @@ const getAllImgs = async (req, res) => {
       throw err
     }
 
-    const allImgs = await roomDetailService.getAllImgs(roomId);
+    const allImgs = await roomDetailService.getAllImgsByRoomId(roomId);
 
     if (allImgs === []) {
       const err = new Error('ROOM_IMAGES_NOT_FOUND')
@@ -50,4 +50,4 @@ const getAllImgs = async (req, res) => {
   }
 };
 
-module.exports = { getRoomDetail, getAllImgs };
+module.exports = { getRoomDetail, getAllImgsByRoomId };

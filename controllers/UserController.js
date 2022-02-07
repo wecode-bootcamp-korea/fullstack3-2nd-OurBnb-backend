@@ -22,16 +22,4 @@ const kakaologin = async (req, res) => {
 	}
 };
 
-const getReservationList = async (req, res) => {
-	try {
-		const userId = req.userId;
-		const reservationList = await userService.getReservationList(userId);
-
-		return res.status(200).json(reservationList);
-	} catch (err) {
-		console.log(err);
-		return res.status(400).json({ message: 'ERROR' });
-	}
-};
-
-module.exports = { kakaologin, getReservationList };
+module.exports = { kakaologin };
