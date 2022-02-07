@@ -13,8 +13,12 @@ router.get('/', checkToken, roomController.getRoomList);
 router.get('/options', roomController.getOptions);
 
 router.get('/detail', roomDetailController.getRoomDetail);
+router.get('/images', roomDetailController.getAllImgsByRoomId);
 router.get('/reviews', roomReviewController.getRoomReview);
 
 router.post('/reservation', authToken, reservationController.postReservation);
+router.get('/reservation', authToken, reservationController.getReservation);
+router.put('/reservation', authToken, reservationController.updateReservation);
+router.delete('/reservation', authToken, reservationController.deleteReservation);
 
 module.exports = router;
