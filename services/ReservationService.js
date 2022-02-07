@@ -30,7 +30,9 @@ const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) =>
   
 const getReservation = async (userId) => {
 
-  const reservation = await reservationDao.getReservation(userId);
+  const reservationPast = await reservationDao.getReservation(userId, reservationType.PAST);
+  const reservationOngoing = await reservationDao.getReservation(userId, reservationType.ONGOING);
+  const reservationBooked = await reservationDao.getReservation(userId, reservationType.BOOKED);
 
   if (!reservation) {
     const error = new Error('GETTING RESERVATION FAILED');
@@ -38,7 +40,7 @@ const getReservation = async (userId) => {
     throw error;
   }
 
-  return reservation;
+  return {reservationPast, reservationOngoing, reservationBooked};
 }
                                                            
 const updateReservation = async (guestCount, oldCheckIn, oldCheckOut, newCheckIn, newCheckOut, userId, roomId) => {
