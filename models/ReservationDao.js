@@ -1,16 +1,16 @@
 const prisma = require('./index');
 
 const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
-  return await prisma.$queryRaw`
+	return await prisma.$queryRaw`
     INSERT INTO
       reservations (guest_count, check_in, check_out, user_id, room_id)
     VALUES 
       (${guestCount}, ${checkIn}, ${checkOut}, ${userId}, ${roomId}) 
-  `; 
-}
+  `;
+};
 
 const roomReservationCheck = async (checkIn, checkOut, roomId) => {
-  const [reservation] = await prisma.$queryRaw`
+	const [reservation] = await prisma.$queryRaw`
     SELECT
       reservations.room_id AS roomId,
       users.id AS userId,
@@ -25,22 +25,22 @@ const roomReservationCheck = async (checkIn, checkOut, roomId) => {
     AND
       reservations.room_id = ${roomId}
   `;
-  return reservation; 
-}
+	return reservation;
+};
 
-const guestMaxNumber = async (roomId) => {
-  const [total] = await prisma.$queryRaw`
+const guestMaxNumber = async roomId => {
+	const [total] = await prisma.$queryRaw`
     SELECT
       guest_capacity AS guestCapacity 
     FROM rooms
     WHERE
       rooms.id = ${roomId}
   `;
-  return total;
-}
+	return total;
+};
 
-const getReservation = async (userId) => {
-  const past = await prisma.$queryRaw`
+const getReservation = async userId => {
+	const past = await prisma.$queryRaw`
     SELECT
       rooms.name AS roomName,
       rooms.address,
@@ -59,7 +59,7 @@ const getReservation = async (userId) => {
       reservations.check_out < DATE(now())
   `;
 
-  const current = await prisma.$queryRaw`
+	const current = await prisma.$queryRaw`
     SELECT
       rooms.name AS roomName,
       rooms.address,
@@ -78,7 +78,7 @@ const getReservation = async (userId) => {
       DATE(NOW()) BETWEEN reservations.check_in AND reservations.check_out
   `;
 
-  const booked = await prisma.$queryRaw`
+	const booked = await prisma.$queryRaw`
     SELECT
       rooms.name AS roomName,
       rooms.address,
@@ -97,11 +97,19 @@ const getReservation = async (userId) => {
       reservations.check_in > DATE(now())
   `;
 
-  return { past, current, booked }; 
-}
-    
-const updateReservation = async (guestCount, oldCheckIn, oldCheckOut, newCheckIn, newCheckOut, userId, roomId) => {
-  const result = await prisma.$queryRaw`
+	return { past, current, booked };
+};
+
+const updateReservation = async (
+	guestCount,
+	oldCheckIn,
+	oldCheckOut,
+	newCheckIn,
+	newCheckOut,
+	userId,
+	roomId,
+) => {
+	const result = await prisma.$queryRaw`
     UPDATE reservations
     SET reservations.guest_count = ${guestCount}, reservations.check_in = ${newCheckIn},
         reservations.check_out = ${newCheckOut}, reservations.user_id = ${userId}, 
@@ -115,11 +123,11 @@ const updateReservation = async (guestCount, oldCheckIn, oldCheckOut, newCheckIn
     AND 
       reservations.check_out = ${oldCheckOut}
   `;
-  return result; 
-}
+	return result;
+};
 
 const deleteReservation = async (checkIn, checkOut, userId, roomId) => {
-  const result = await prisma.$queryRaw`
+	const result = await prisma.$queryRaw`
     DELETE
     FROM reservations
     WHERE 
@@ -131,11 +139,11 @@ const deleteReservation = async (checkIn, checkOut, userId, roomId) => {
     AND 
       reservations.check_out = ${checkOut}
   `;
-  return result;
-}
+	return result;
+};
 
 const userReservationCheck = async (checkIn, checkOut, userId, roomId) => {
-  const [reservation] = await prisma.$queryRaw`
+	const [reservation] = await prisma.$queryRaw`
     SELECT
       reservations.room_id AS roomId,
       users.id AS userId,
@@ -152,7 +160,15 @@ const userReservationCheck = async (checkIn, checkOut, userId, roomId) => {
     AND
       reservations.room_id = ${roomId}
   `;
-  return reservation; 
-}
+	return reservation;
+};
 
-module.exports = { postReservation, roomReservationCheck, guestMaxNumber, getReservation, updateReservation, deleteReservation, userReservationCheck };
+module.exports = {
+	postReservation,
+	roomReservationCheck,
+	guestMaxNumber,
+	getReservation,
+	updateReservation,
+	deleteReservation,
+	userReservationCheck,
+};
