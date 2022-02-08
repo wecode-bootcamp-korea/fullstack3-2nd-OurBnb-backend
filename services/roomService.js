@@ -6,25 +6,25 @@ const getRoomList = async (
 	checkin,
 	checkout,
 	person,
-	roomTypeId,
+	roomTypeIdForSort,
 	optionIdForSort,
 	userId,
 	limit,
 	offset,
 ) => {
+	const region = await roomDao.getLocationLatLng(location);
+
 	const roomList = await roomDao.getRoomList(
 		location,
 		checkin,
 		checkout,
 		person,
-		roomTypeId,
+		roomTypeIdForSort,
 		optionIdForSort,
 		userId,
 		limit,
 		offset,
 	);
-
-	const region = await roomDao.getLocationLatLng(location);
 
 	roomList['location'] = region['name'];
 	roomList['lat'] = region['lat'];
