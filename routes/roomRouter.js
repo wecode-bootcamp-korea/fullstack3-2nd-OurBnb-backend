@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-	roomController,
-	roomDetailController,
-	roomReviewController,
-	reservationController,
-} = require('../controllers');
+const { roomController, roomDetailController, reservationController } = require('../controllers');
 const { authToken, checkToken } = require('../middleware/auth');
 
 router.get('/', checkToken, roomController.getRoomList);

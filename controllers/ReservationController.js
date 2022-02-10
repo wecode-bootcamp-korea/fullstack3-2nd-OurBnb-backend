@@ -50,21 +50,35 @@ const getReservation = async (req, res) => {
 
 const updateReservation = async (req, res) => {
 	try {
+<<<<<<< HEAD
 		const userId = req.userId;
 		const { reservationId } = req.params;
 		const { guestCount, newCheckIn, newCheckOut } = req.query;
 
 		if (!userId || !reservationId || !guestCount || !newCheckIn || !newCheckOut) {
+=======
+    const { reservationId } = req.params;
+		const { guestCount, newCheckIn, newCheckOut } = req.query;
+
+		if (!reservationId || !guestCount || !newCheckIn || !newCheckOut) {
+>>>>>>> fe9052f (Fix: Reservation C.R.U.D edited by mentoring && Review API separated)
 			const err = new Error('REQUIREMENT_MISSING');
 			err.statusCode = 400;
 			throw err;
 		}
 		const reservation = await reservationService.updateReservation(
+<<<<<<< HEAD
 			userId,
 			reservationId,
 			guestCount,
 			newCheckIn,
 			newCheckOut,
+=======
+			reservationId,
+      guestCount,
+			newCheckIn,
+			newCheckOut
+>>>>>>> fe9052f (Fix: Reservation C.R.U.D edited by mentoring && Review API separated)
 		);
 
 		return res.status(200).json({ message: 'RESERVATION_UPDATED' });
