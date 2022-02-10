@@ -2,15 +2,15 @@ const { reservationDao } = require('../models');
 
 const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
   
-  const isResvAvailable = (await reservationDao.roomReservationCheck(checkIn, checkOut,roomId)) ? false : true;
+  const existingReservation = (await reservationDao.getReservation(checkIn, checkOut,roomId)) ? true : false ;
 
-  if (!isResvAvailable) {
+  if (existingReservation) {
     const error = new Error('UNAVAILABLE RESERVATION PERIOD');
     error.statusCode = 400;
     throw error;
   }
   
-  const isGuestNumAvailable = ((await reservationDao.guestMaxNumber(roomId)) >= guestCount) ? true : false;
+  const isGuestNumAvailable = ((await reservationDao.getGuestMaxNumber(roomId)) >= guestCount) ? true : false;
   
   if (!isGuestNumAvailable) {
     const error = new Error('GUEST COUNT OVER THE LIMIT');
@@ -28,7 +28,7 @@ const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) =>
   return reservationResult;
 };
   
-const getReservation = async (userId) => {
+const getReservationByUserId = async (userId) => {
 
   const reservationPast = await reservationDao.getReservation(userId, reservationType.PAST);
   const reservationOngoing = await reservationDao.getReservation(userId, reservationType.ONGOING);

@@ -14,30 +14,27 @@ const kakaologin = async kakaoToken => {
 		throw error;
 	}
 
-	console.log("kakaoUserData", kakaoUserData);
 	// 필요한 정보만 골라내서 담을 Kakao User 객체
 	const kakaoUser = {};
 
-	kakaoUser['userName'] = kakaoUserData['properties']['nickname'];
-	kakaoUser['snsId'] = kakaoUserData['id'];
+	kakaoUser['userName'] = kakaoUserData.properties.nickname
+	kakaoUser['snsId'] = kakaoUserData.id;
 	kakaoUser['snsIsVerified'] = true;
-	kakaoUser['imgUrl'] = kakaoUserData['kakao_account']['profile']['profile_image_url'];
-
-	console.log('kakaoUser', kakaoUser);
+	kakaoUser['imgUrl'] = kakaoUserData.kakao_account.profile.profile_image_url
 
 	// 데이터베이스 내에 해당 snsId가 존재 할 경우 해당 유저 정보 반환
-	let user = await userDao.getUserBySnsId(kakaoUser['snsId']);
+	let user = await userDao.getUserBySnsId(kakaoUser.snsId);
 	// 데이터베이스 내에 해당 snsId가 존재하지 않을 경우
 	if (!user) {
 		// 신규 유저 등록
 		await userDao.createUser(
-			kakaoUser['userName'],
-			kakaoUser['imgUrl'],
-			kakaoUser['snsId'],
-			kakaoUser['snsIsVerified'],
+			kakaoUser.userName,
+			kakaoUser.imgUrl,
+			kakaoUser.snsId,
+			kakaoUser.snsIsVerified,
 		);
 		// 신규 등록된 유저 정보 반환
-		user = await userDao.getUserBySnsId(kakaoUser['snsId']);
+		user = await userDao.getUserBySnsId(kakaoUser.snsId);
 	}
 	console.log('user data', user);
 	//해당 유저의 snsId로 우리 서비스 자체 토큰 발행 후 최종 return

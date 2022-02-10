@@ -2,7 +2,7 @@ const { reservationService } = require('../services');
 const { reservationBuilder } = require('./queryBuilder')
 const prisma = require('./index');
 
-const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
+const createReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
   return await prisma.$queryRaw`
     INSERT INTO
       reservations (guest_count, check_in, check_out, user_id, room_id)
@@ -30,7 +30,7 @@ const roomReservationCheck = async (checkIn, checkOut, roomId) => {
   return reservation; 
 }
 
-const guestMaxNumber = async (roomId) => {
+const getGuestMaxNumber = async (roomId) => {
   const [total] = await prisma.$queryRaw`
     SELECT
       guest_capacity AS guestCapacity 
@@ -41,7 +41,7 @@ const guestMaxNumber = async (roomId) => {
   return total;
 }
 
-const getReservation = async (userId, reservationType) => {
+const getReservationByUserId = async (userId, reservationType) => {
 
   const reservation = await prisma.$queryRaw`
     SELECT
