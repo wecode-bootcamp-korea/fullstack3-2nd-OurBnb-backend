@@ -4,7 +4,6 @@ const router = express.Router();
 const {
 	roomController,
 	roomDetailController,
-	roomReviewController,
 	reservationController,
 } = require('../controllers');
 const { authToken, checkToken } = require('../middleware/auth');
@@ -14,7 +13,6 @@ router.get('/options', roomController.getOptions);
 
 router.get('/detail', roomDetailController.getRoomDetail);
 router.get('/images', roomDetailController.getAllImgsByRoomId);
-router.get('/reviews', roomReviewController.getRoomReview);
 
 router.post('/reservation', authToken, reservationController.postReservation);
 router.get('/reservation', authToken, reservationController.getReservation);
