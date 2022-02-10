@@ -26,9 +26,9 @@ const getRoomList = async (
 
 	const region = await roomDao.getLocationLatLng(location);
 
-	roomList['location'] = region['name'];
-	roomList['lat'] = region['lat'];
-	roomList['lng'] = region['lng'];
+	roomList.location = region.name;
+	roomList.lat = region.lat;
+	roomList.lng = region.lng;
 
 	return roomList;
 };

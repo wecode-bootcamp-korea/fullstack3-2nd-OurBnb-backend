@@ -13,8 +13,8 @@ const { authToken, checkToken } = require('../middleware/auth');
 router.get('/', checkToken, roomController.getRoomList);
 router.get('/options', roomController.getOptions);
 
-router.get('/detail', roomDetailController.getRoomDetail);
-router.get('/images', roomDetailController.getAllImgsByRoomId);
+router.get('/detail', roomController.getRoomDetail);
+router.get('/images', roomController.getAllImgsByRoomId);
 router.get('/reviews', roomReviewController.getRoomReview);
 
 module.exports = router;

@@ -10,14 +10,16 @@ const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) =>
     throw error;
   }
   
-  const isGuestNumAvailable = ((await reservationDao.getGuestMaxNumber(roomId)) >= guestCount) ? true : false;
+  const maxGuest = await reservationDao.getMaxGuest(roomId)
   
-  if (!isGuestNumAvailable) {
+  if (maxGuest < guestCount) {
     const error = new Error('GUEST COUNT OVER THE LIMIT');
     error.statusCode = 400;
     throw error;
   }
   const reservationResult = await reservationDao.postReservation(guestCount, checkIn, checkOut, userId, roomId);  
+
+  reservationResult.affectdRows() !== 1
   
   if (!reservationResult) {
     const error = new Error('MAKING RESERVATION FAILED');
@@ -77,9 +79,9 @@ const deleteReservation = async (checkIn, checkOut, userId, roomId) => {
   }
 
   // 존재하면 해당 정보를 매개변수로 넘겨서 해당 예약내역을 데이터베이스 내에서 삭제 처리 
-  const reservation = await reservationDao.deleteReservation(checkIn, checkOut, userId, roomId);
+  const deletedReservation = await reservationDao.deleteReservation(checkIn, checkOut, userId, roomId);
 
-  if (!reservation) {
+  if (deletedReservation.affectdRows() !== 1) {
     const error = new Error('DELETING RESERVATION FAILED');
     error.statusCode = 400;
     throw error;

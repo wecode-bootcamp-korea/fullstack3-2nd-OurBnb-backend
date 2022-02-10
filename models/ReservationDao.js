@@ -14,10 +14,7 @@ const createReservation = async (guestCount, checkIn, checkOut, userId, roomId) 
 const roomReservationCheck = async (checkIn, checkOut, roomId) => {
   const [reservation] = await prisma.$queryRaw`
     SELECT
-      reservations.room_id AS roomId,
-      users.id AS userId,
-      reservations.check_in AS checkIn,
-      reservations.check_out AS checkOut
+      reservations.id
     FROM reservations
     JOIN users ON reservations.user_id = users.id
     WHERE
@@ -26,6 +23,7 @@ const roomReservationCheck = async (checkIn, checkOut, roomId) => {
       OR (DATE(${checkIn}) <= reservations.check_in AND DATE(${checkOut}) >= reservations.check_out))
     AND
       reservations.room_id = ${roomId}
+    LIMIT 1
   `;
   return reservation; 
 }
@@ -46,6 +44,7 @@ const getReservationByUserId = async (userId, reservationType) => {
   const reservation = await prisma.$queryRaw`
     SELECT
       reservations.id AS reservationId,
+      rooms.id AS roomId, // 참고
       rooms.name AS roomName,
       rooms.address,
       users.username AS hostName,
@@ -65,7 +64,7 @@ const getReservationByUserId = async (userId, reservationType) => {
 }
     
 const updateReservation = async (guestCount, newCheckIn, newCheckOut, userId, roomId) => {
-  const result = await prisma.$queryRaw`
+  return await prisma.$queryRaw`
     UPDATE reservations
     SET reservations.guest_count = ${guestCount}, reservations.check_in = ${newCheckIn},
         reservations.check_out = ${newCheckOut}, reservations.user_id = ${userId}, 
@@ -73,17 +72,15 @@ const updateReservation = async (guestCount, newCheckIn, newCheckOut, userId, ro
     WHERE 
       reservations.id = ${id} 
   `;
-  return result; 
 }
 
 const deleteReservation = async (id) => {
-  const result = await prisma.$queryRaw`
+  return await prisma.$queryRaw`
     DELETE
     FROM reservations
     WHERE
       id = ${id}
   `;
-  return result;
 }
 
 const userReservationCheck = async (checkIn, checkOut, userId, roomId) => {
@@ -103,6 +100,7 @@ const userReservationCheck = async (checkIn, checkOut, userId, roomId) => {
       reservations.user_id = ${userId}
     AND
       reservations.room_id = ${roomId}
+
   `;
   return reservation; 
 }

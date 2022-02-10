@@ -36,7 +36,7 @@ const getRoomList = async (
       rooms.price,
       rooms.latitude,
       rooms.longitude,
-      hosts.is_super_host,
+      hosts.is_super_host AS isSuperHost,
       room_types.name AS roomType,
       (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId )AS imgUrl,
       (SELECT COUNT(user_reviews.review) FROM user_reviews WHERE user_reviews.room_id = roomId) AS reviewCount,
@@ -56,7 +56,7 @@ const getRoomList = async (
     JOIN locations ON locations.id = rooms.location_id
     JOIN rooms_options ON rooms_options.room_id = rooms.id
     JOIN options ON options.id = rooms_options.option_id
-    WHERE
+    WHERE 1=1
     -- location이 포함된 컬럼만 선택
       locations.name LIKE CONCAT("%",${location},"%")
     AND
