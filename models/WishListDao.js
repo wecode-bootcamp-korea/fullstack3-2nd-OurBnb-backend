@@ -13,7 +13,7 @@ const getWishList = async userId => {
   rooms.price,
   rooms.latitude,
   rooms.longitude,
-  hosts.is_super_host AS hostId,
+  hosts.is_super_host AS isSuperHost,
   room_types.name AS roomType,
   (SELECT GROUP_CONCAT(public_imgs.img_url SEPARATOR ',') FROM public_imgs WHERE public_imgs.room_id = roomId )AS imgUrl,
   (SELECT COUNT(user_reviews.review) FROM user_reviews WHERE user_reviews.room_id = roomId) AS reviewCount,
