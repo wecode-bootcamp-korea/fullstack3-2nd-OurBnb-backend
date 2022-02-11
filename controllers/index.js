@@ -1,5 +1,6 @@
-const testController = async (req,res) => {
-   res.send("Hello World");
-}
+const userController = require('./UserController');
+const roomController = require('./RoomController');
+const roomDetailController = require('./RoomDetailController');
+const reservationController = require('./ReservationController');
 
-module.exports = { testController }
+module.exports = { userController, roomController, roomDetailController, reservationController };
