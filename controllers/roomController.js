@@ -7,13 +7,14 @@ const getRoomList = async (req, res) => {
 		const userId = req.userId;
 		const { location, checkin, checkout, person, roomTypeId, option, limit, offset } = req.query;
 		const optionIdForSort = Array.isArray(option) ? option.join() : option;
+		const roomTypeIdForSort = Array.isArray(roomTypeId) ? roomTypeId.join() : roomTypeId;
 
 		const roomListInfo = await roomService.getRoomList(
 			location,
 			checkin,
 			checkout,
 			person,
-			roomTypeId,
+			roomTypeIdForSort,
 			optionIdForSort,
 			userId,
 			limit,
@@ -38,28 +39,4 @@ const getOptions = async (req, res) => {
 	}
 };
 
-const addWishList = async (req, res) => {
-	try {
-		const { userId, roomId } = req.body;
-		await roomService.addWishList(userId, roomId);
-
-		return res.status(200).json({ message: 'SUCCESS_ADD_WISHLIST' });
-	} catch (err) {
-		console.log(err);
-		return res.status(400).json({ messgae: err.message });
-	}
-};
-
-const deleteWishList = async (req, res) => {
-	try {
-		const { userId, roomId } = req.body;
-		await roomService.deleteWishList(userId, roomId);
-
-		return res.status(200).json({ message: 'SUCCESS_DELETE_WISHLIST' });
-	} catch (err) {
-		console.log(err);
-		return res.status(400).json({ messgae: err.message });
-	}
-};
-
-module.exports = { getRoomList, getOptions, addWishList, deleteWishList };
+module.exports = { getRoomList, getOptions };
