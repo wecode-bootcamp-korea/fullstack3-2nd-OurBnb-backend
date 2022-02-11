@@ -1,7 +1,7 @@
 const reservationType = {
 	PAST: 'PAST',
-    CURRENT: 'CURRENT',
-	BOOKED: 'BOOKED'
-}
+	CURRENT: 'CURRENT',
+	BOOKED: 'BOOKED',
+};
 
-module.exports = { reservationType }
+module.exports = { reservationType };

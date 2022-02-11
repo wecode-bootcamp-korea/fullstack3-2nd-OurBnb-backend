@@ -18,7 +18,7 @@ const postReservation = async (req, res) => {
 			roomId,
 		);
 
-		return res.status(200).json({ message: 'RESERVATION_CONFIRMED', reservation });
+		return res.status(200).json({ message: 'RESERVATION_CONFIRMED' });
 	} catch (err) {
 		console.log(err);
 		return res
@@ -50,19 +50,21 @@ const getReservation = async (req, res) => {
 
 const updateReservation = async (req, res) => {
 	try {
-    const { reservationId } = req.params;
+		const userId = req.userId;
+		const { reservationId } = req.params;
 		const { guestCount, newCheckIn, newCheckOut } = req.query;
 
-		if (!reservationId || !guestCount || !newCheckIn || !newCheckOut) {
+		if (!userId || !reservationId || !guestCount || !newCheckIn || !newCheckOut) {
 			const err = new Error('REQUIREMENT_MISSING');
 			err.statusCode = 400;
 			throw err;
 		}
 		const reservation = await reservationService.updateReservation(
+			userId,
 			reservationId,
-      guestCount,
+			guestCount,
 			newCheckIn,
-			newCheckOut
+			newCheckOut,
 		);
 
 		return res.status(200).json({ message: 'RESERVATION_UPDATED' });
@@ -76,15 +78,16 @@ const updateReservation = async (req, res) => {
 
 const deleteReservation = async (req, res) => {
 	try {
+		const userId = req.userId;
 		const { reservationId } = req.params;
 
-		if (!reservationId) {
+		if (!userId || !reservationId) {
 			const err = new Error('REQUIREMENT_MISSING');
 			err.statusCode = 400;
 			throw err;
 		}
 
-		const reservation = await reservationService.deleteReservation(reservationId);
+		const reservation = await reservationService.deleteReservation(userId, reservationId);
 
 		return res.status(200).json({ message: 'RESERVATION_CANCELLED' });
 	} catch (err) {
