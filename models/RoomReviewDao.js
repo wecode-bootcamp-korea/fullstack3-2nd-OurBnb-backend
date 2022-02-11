@@ -1,7 +1,7 @@
 const prisma = require('./index');
 
-const getRoomReview = async (roomId) => { 
-  const review = await prisma.$queryRaw`
+const getRoomReview = async roomId => {
+	const review = await prisma.$queryRaw`
     SELECT
       users.username,
       users.img_url AS imgUrl,
@@ -16,29 +16,29 @@ const getRoomReview = async (roomId) => {
     WHERE
       user_reviews.room_id = ${roomId}
     `;
-    return review;
-}
+	return review;
+};
 
-const getAvgRoomRate = async (roomId) => {
-  const [{avgRate}] = await prisma.$queryRaw`
+const getAvgRoomRate = async roomId => {
+	const [{ avgRate }] = await prisma.$queryRaw`
     SELECT 
       AVG(rate) as avgRate
     FROM user_reviews
     WHERE 
       user_reviews.room_id = ${roomId}
   `;
-  return avgRate;
-}
+	return avgRate;
+};
 
-const getRoomReviewCount = async (roomId) => {
-    const [{reviewCount}] = await prisma.$queryRaw`
+const getRoomReviewCount = async roomId => {
+	const [{ reviewCount }] = await prisma.$queryRaw`
     SELECT 
       COUNT(*) AS reviewCount
     FROM user_reviews
     WHERE 
       user_reviews.room_id = ${roomId}
   `;
-  return reviewCount;
-}
+	return reviewCount;
+};
 
 module.exports = { getRoomReview, getAvgRoomRate, getRoomReviewCount };
