@@ -1,10 +1,10 @@
 const prisma = require('./index');
 const PrismaClient = require('@prisma/client');
 const { raw } = PrismaClient.Prisma;
-const { reservationBuilder } = require('./queryBuilder')
+const { reservationBuilder } = require('./queryBuilder');
 
-const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
-	return await prisma.$queryRaw`
+const createReservation = async (guestCount, checkIn, checkOut, userId, roomId) => {
+	return await prisma.$executeRaw`
     INSERT INTO
       reservations (guest_count, check_in, check_out, user_id, room_id)
     VALUES 
@@ -12,9 +12,10 @@ const postReservation = async (guestCount, checkIn, checkOut, userId, roomId) =>
   `;
 };
 
-const roomReservationCheck = async (checkIn, checkOut, roomId) => {
+const checkRoomReservation = async (checkIn, checkOut, roomId) => {
 	const [reservation] = await prisma.$queryRaw`
     SELECT
+      reservations.id AS reservationId,
       reservations.room_id AS roomId,
       users.id AS userId,
       reservations.check_in AS checkIn,
@@ -27,11 +28,12 @@ const roomReservationCheck = async (checkIn, checkOut, roomId) => {
       OR (DATE(${checkIn}) <= reservations.check_in AND DATE(${checkOut}) >= reservations.check_out))
     AND
       reservations.room_id = ${roomId}
+    LIMIT 1
   `;
 	return reservation;
 };
 
-const guestMaxNumberByRoomId = async roomId => {
+const getGuestMaxByRoomId = async roomId => {
 	const [total] = await prisma.$queryRaw`
     SELECT
       guest_capacity AS guestCapacity 
@@ -42,7 +44,7 @@ const guestMaxNumberByRoomId = async roomId => {
 	return total;
 };
 
-const guestMaxNumberByReservationId = async reservationId => {
+const getGuestMaxByReservationId = async reservationId => {
 	const [total] = await prisma.$queryRaw`
     SELECT
       guest_capacity AS guestCapacity 
@@ -76,33 +78,30 @@ const getReservation = async (userId, reservationType) => {
 	return reservation;
 };
 
-const updateReservation = async (
-	reservationId,
-  guestCount,
-	newCheckIn,
-	newCheckOut
-) => {
-	const result = await prisma.$queryRaw`
+const updateReservation = async (userId, reservationId, guestCount, newCheckIn, newCheckOut) => {
+	return await prisma.$executeRaw`
     UPDATE reservations
     SET reservations.guest_count = ${guestCount}, reservations.check_in = ${newCheckIn},
         reservations.check_out = ${newCheckOut}
-    WHERE 
+    WHERE
+      reservations.user_id = ${userId} 
+    AND
       reservations.id = ${reservationId}
   `;
-	return result;
 };
 
-const deleteReservation = async (reservationId) => {
-	const result = await prisma.$queryRaw`
+const deleteReservation = async (userId, reservationId) => {
+	return await prisma.$executeRaw`
     DELETE
     FROM reservations
     WHERE 
+      reservations.user_id = ${userId} 
+    AND
       reservations.id = ${reservationId}
   `;
-	return result;
 };
 
-const userReservationCheck = async (reservationId) => {
+const checkUserReservation = async reservationId => {
 	const [reservation] = await prisma.$queryRaw`
     SELECT
       reservations.room_id AS roomId,
@@ -118,12 +117,12 @@ const userReservationCheck = async (reservationId) => {
 };
 
 module.exports = {
-	postReservation,
-	roomReservationCheck,
-	guestMaxNumberByRoomId,
-  guestMaxNumberByReservationId,
+	createReservation,
+	checkRoomReservation,
+	getGuestMaxByRoomId,
+	getGuestMaxByReservationId,
 	getReservation,
 	updateReservation,
 	deleteReservation,
-	userReservationCheck
+	checkUserReservation,
 };

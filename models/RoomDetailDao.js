@@ -1,7 +1,7 @@
 const prisma = require('./index');
 
-const getMainInfo = async (roomId) => { 
-  const [detail] = await prisma.$queryRaw`
+const getMainInfo = async roomId => {
+	const [detail] = await prisma.$queryRaw`
     SELECT
       rooms.id AS roomId,
       rooms.name AS roomName,
@@ -33,12 +33,12 @@ const getMainInfo = async (roomId) => {
       users on rooms.host_id = users.host_id 
     WHERE 
       rooms.id = ${roomId}
-  `; 
-  return detail;
+  `;
+	return detail;
 };
 
-const getOption = async (roomId) => { 
-  const option = await prisma.$queryRaw`
+const getOption = async roomId => {
+	const option = await prisma.$queryRaw`
     SELECT
       options.name AS optionName,                
       options.logo_url AS optionLogoUrl,
@@ -54,11 +54,11 @@ const getOption = async (roomId) => {
     WHERE
       rooms.id = ${roomId}
   `;
-  return option; 
-} 
+	return option;
+};
 
-const getBenefit = async (roomId) => { 
-  const benefit = await prisma.$queryRaw`
+const getBenefit = async roomId => {
+	const benefit = await prisma.$queryRaw`
     SELECT
       benefits.title AS benefitTitle, 
       benefits.logo_url AS benefitLogoUrl, 
@@ -71,11 +71,11 @@ const getBenefit = async (roomId) => {
     WHERE
       rooms.id = ${roomId}
   `;
-  return benefit; 
-} 
+	return benefit;
+};
 
-const getRule = async (roomId) => { 
-  const rule = await prisma.$queryRaw`
+const getRule = async roomId => {
+	const rule = await prisma.$queryRaw`
     SELECT
       rules.logo_url AS rulesLogoUrl, 
       rules.description AS rulesDesc
@@ -87,11 +87,11 @@ const getRule = async (roomId) => {
     WHERE
       rooms.id = ${roomId}
   `;
-  return rule; 
-} 
+	return rule;
+};
 
-const getSafety = async (roomId) => { 
-  const safety = await prisma.$queryRaw`
+const getSafety = async roomId => {
+	const safety = await prisma.$queryRaw`
     SELECT
       safety.logo_url AS safetyLogoUrl, 
       safety.description AS safetyDesc  
@@ -103,11 +103,11 @@ const getSafety = async (roomId) => {
     WHERE
       rooms.id = ${roomId}
   `;
-  return safety; 
-} 
+	return safety;
+};
 
-const getAllImgsByRoomId = async (roomId) => {
-  const allImgs = await prisma.$queryRaw`
+const getAllImgsByRoomId = async roomId => {
+	const allImgs = await prisma.$queryRaw`
     SELECT 
       public_imgs.img_url AS imgUrl
     FROM public_imgs
@@ -116,7 +116,7 @@ const getAllImgsByRoomId = async (roomId) => {
     WHERE 
       rooms.id = ${roomId}
   `;
-  return allImgs;
-}
+	return allImgs;
+};
 
 module.exports = { getMainInfo, getOption, getBenefit, getRule, getSafety, getAllImgsByRoomId };
