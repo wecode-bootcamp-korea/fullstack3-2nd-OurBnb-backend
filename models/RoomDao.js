@@ -59,7 +59,9 @@ const getRoomList = async (
     WHERE 1=1
     AND
     -- location이 포함된 컬럼만 선택
-      IF(${location}, locations.name LIKE CONCAT("%",${location},"%") , locations.name is NOT NULL)
+      IF(${
+				location ? true : false
+			}, locations.name LIKE CONCAT("%",${location},"%") , locations.name is NOT NULL)
     AND
     -- 내가 선택한 체크인, 체크아웃 범위에 포함이 안된 컬럼만 선택
       rooms.id NOT IN (SELECT reservations.room_id FROM reservations WHERE reservations.check_in BETWEEN '2022-01-19' AND '2022-01-26')
